@@ -17,6 +17,12 @@
   gap: 10px;
 }
 
+.ingredients {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .BreadBottom {
   height: 13%;
   width: 80%;

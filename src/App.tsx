@@ -3,8 +3,16 @@ import meatImage from './assets/meat.svg';
 import cheeseImage from './assets/cheese.svg';
 import lettuceImage from './assets/lettuce.svg';
 import baconImage from './assets/bacon.svg';
+import {useState} from "react";
 
 const App = () => {
+    const [ingredients, setIngredients] = useState([
+        {name: 'Meat', count: 0},
+        {name: 'Cheese', count: 0},
+        {name: 'Lettuce', count: 0},
+        {name: 'Bacon', count: 0},
+    ])
+
     type IIngredient = {
         title: string;
         price: number;
@@ -18,6 +26,15 @@ const App = () => {
         {name: 'Bacon', price: 60, image: baconImage}
     ]
 
+    const changeCount = (ingredientName) => {
+        setIngredients((prevIngredients) =>
+            prevIngredients.map((ingredient) =>
+            ingredient.name === ingredientName
+                ? {...ingredient, count: ingredient.count + 1}
+                : ingredient
+            )
+        );
+    };
 
   return (
       <div className="container">
@@ -25,18 +42,24 @@ const App = () => {
               Ingredients:
               <hr/>
               <div className="ingredients_container">
-                  {INGREDIENTS.map((ingredient, index) => (
-                      <button key={index} type="button">
-                          <img src={ingredient.image} alt={ingredient.image} width="30px" height="30px"/>  -
-                          {ingredient.name}:
-                          {ingredient.price}
-                      </button>
-                  ))}
+                  <div className="ingredients">
+                      {INGREDIENTS.map((ingredient, index) => (
+                          <button key={index} type="button" onClick={() => changeCount(ingredient.name)}>
+                              <img src={ingredient.image} alt={ingredient.image} width="30px" height="30px"/> -
+                              {ingredient.name}:
+                              {ingredient.price} SOM
+                              <span>
+                                  Count: {ingredients.find(i => i.name === ingredient.name)?.count}
+                              </span>
+                              <button type="button">X</button>
+                          </button>
+                      ))}
+                  </div>
               </div>
 
           </div>
           <div>
-              Burger:
+          Burger:
               <hr/>
               <div className="Burger">
                   <div className="BreadTop">

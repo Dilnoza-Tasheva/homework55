@@ -4,6 +4,9 @@ import cheeseImage from './assets/cheese.svg';
 import lettuceImage from './assets/lettuce.svg';
 import baconImage from './assets/bacon.svg';
 import {useState} from "react";
+import {changeCount} from "./Components/ChangeCount/ChangeCount.tsx";
+import {deleteIngredient} from "./Components/deleteIngredient/deleteIngredient.tsx";
+import {totalSumCount} from "./Components/totalSumCount/totalSumCount.tsx";
 
 const App = () => {
     const [ingredients, setIngredients] = useState([
@@ -13,49 +16,12 @@ const App = () => {
         {name: 'Bacon', count: 0},
     ]);
 
-    type IIngredient = {
-        name: string;
-        price: number;
-        src: string;
-    }
-
     const INGREDIENTS = [
         {name: 'Meat', price: 80, image: meatImage},
         {name: 'Cheese', price: 50, image: cheeseImage},
         {name: 'Salad', price: 10, image: lettuceImage},
         {name: 'Bacon', price: 60, image: baconImage}
     ]
-
-    const changeCount = (ingredientName: IIngredient['name']) => {
-        setIngredients((prevIngredients) =>
-            prevIngredients.map((ingredient) =>
-            ingredient.name === ingredientName
-                ? {...ingredient, count: ingredient.count + 1}
-                : ingredient
-            )
-
-        );
-    };
-
-    const deleteIngredient = (ingredientName: IIngredient['name']) => {
-        setIngredients((prevIngredients) =>
-            prevIngredients.map((ingredient) =>
-                ingredient.name === ingredientName && ingredient.count > 0
-                    ? {...ingredient, count: ingredient.count - 1}
-                    : ingredient
-            )
-        );
-    };
-
-    const totalSumCount = () => {
-         return ingredients.reduce((acc, ingredient) => {
-            const ingredientInfo = INGREDIENTS.find(i => i.name === ingredient.name);
-            if (ingredientInfo) {
-                return acc + (ingredient.count * ingredientInfo.price);
-            }
-            return acc;
-        }, 30)
-    };
 
   return (
       <div className="container">
@@ -65,7 +31,8 @@ const App = () => {
               <div className="ingredients_container">
                   {INGREDIENTS.map((ingredient, index) => (
                   <div className="ingredients">
-                          <button key={index} type="button" onClick={() => changeCount(ingredient.name)}>
+                          <button key={index} type="button"
+                                  onClick={() => changeCount(ingredient.name, ingredients, setIngredients)}>
                               <img src={ingredient.image} alt={ingredient.image} width="30px" height="30px"/>
                               {ingredient.name}:
                               {ingredient.price} SOM
@@ -73,15 +40,15 @@ const App = () => {
                       <span>
                           Count: {ingredients.find(i => i.name === ingredient.name)?.count}
                       </span>
-                      <button type="button" onClick={() => deleteIngredient(ingredient.name)}>X</button>
+                      <button type="button"
+                              onClick={() => deleteIngredient(ingredient.name, ingredients, setIngredients)}>X</button>
                   </div>
                   ))}
                   <hr/>
                   <span>
-                      <strong>Total: {totalSumCount()} SOM</strong>
+                      <strong>Total: {totalSumCount(ingredients, INGREDIENTS)} SOM</strong>
                   </span>
               </div>
-
           </div>
           <div>
           Burger:
@@ -99,9 +66,7 @@ const App = () => {
                   <div className="BreadBottom"></div>
               </div>
           </div>
-
       </div>
-
   )
 };
 

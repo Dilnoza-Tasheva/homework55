@@ -11,7 +11,7 @@ const App = () => {
         {name: 'Cheese', count: 0},
         {name: 'Salad', count: 0},
         {name: 'Bacon', count: 0},
-    ])
+    ]);
 
     type IIngredient = {
         name: string;
@@ -33,6 +33,7 @@ const App = () => {
                 ? {...ingredient, count: ingredient.count + 1}
                 : ingredient
             )
+
         );
     };
 
@@ -44,6 +45,16 @@ const App = () => {
                     : ingredient
             )
         );
+    };
+
+    const totalSumCount = () => {
+         return ingredients.reduce((acc, ingredient) => {
+            const ingredientInfo = INGREDIENTS.find(i => i.name === ingredient.name);
+            if (ingredientInfo) {
+                return acc + (ingredient.count * ingredientInfo.price);
+            }
+            return acc;
+        }, 30)
     };
 
   return (
@@ -67,7 +78,7 @@ const App = () => {
                   ))}
                   <hr/>
                   <span>
-                      Total:
+                      <strong>Total: {totalSumCount()} SOM</strong>
                   </span>
               </div>
 

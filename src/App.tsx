@@ -9,29 +9,39 @@ const App = () => {
     const [ingredients, setIngredients] = useState([
         {name: 'Meat', count: 0},
         {name: 'Cheese', count: 0},
-        {name: 'Lettuce', count: 0},
+        {name: 'Salad', count: 0},
         {name: 'Bacon', count: 0},
     ])
 
     type IIngredient = {
-        title: string;
+        name: string;
         price: number;
         src: string;
     }
 
-    const INGREDIENTS: Ingredient[] = [
+    const INGREDIENTS = [
         {name: 'Meat', price: 80, image: meatImage},
         {name: 'Cheese', price: 50, image: cheeseImage},
-        {name: 'Lettuce', price: 10, image: lettuceImage},
+        {name: 'Salad', price: 10, image: lettuceImage},
         {name: 'Bacon', price: 60, image: baconImage}
     ]
 
-    const changeCount = (ingredientName) => {
+    const changeCount = (ingredientName: IIngredient['name']) => {
         setIngredients((prevIngredients) =>
             prevIngredients.map((ingredient) =>
             ingredient.name === ingredientName
                 ? {...ingredient, count: ingredient.count + 1}
                 : ingredient
+            )
+        );
+    };
+
+    const deleteIngredient = (ingredientName: IIngredient['name']) => {
+        setIngredients((prevIngredients) =>
+            prevIngredients.map((ingredient) =>
+                ingredient.name === ingredientName && ingredient.count > 0
+                    ? {...ingredient, count: ingredient.count - 1}
+                    : ingredient
             )
         );
     };
@@ -42,19 +52,23 @@ const App = () => {
               Ingredients:
               <hr/>
               <div className="ingredients_container">
+                  {INGREDIENTS.map((ingredient, index) => (
                   <div className="ingredients">
-                      {INGREDIENTS.map((ingredient, index) => (
                           <button key={index} type="button" onClick={() => changeCount(ingredient.name)}>
-                              <img src={ingredient.image} alt={ingredient.image} width="30px" height="30px"/> -
+                              <img src={ingredient.image} alt={ingredient.image} width="30px" height="30px"/>
                               {ingredient.name}:
                               {ingredient.price} SOM
-                              <span>
-                                  Count: {ingredients.find(i => i.name === ingredient.name)?.count}
-                              </span>
-                              <button type="button">X</button>
                           </button>
-                      ))}
+                      <span>
+                          Count: {ingredients.find(i => i.name === ingredient.name)?.count}
+                      </span>
+                      <button type="button" onClick={() => deleteIngredient(ingredient.name)}>X</button>
                   </div>
+                  ))}
+                  <hr/>
+                  <span>
+                      Total:
+                  </span>
               </div>
 
           </div>
@@ -66,9 +80,11 @@ const App = () => {
                       <div className="Seeds1"></div>
                       <div className="Seeds2"></div>
                   </div>
-                  <div className="Salad"></div>
-                  <div className="Cheese"></div>
-                  <div className="Meat"></div>
+                  {ingredients.map((ingredient) => (
+                      Array(ingredient.count).fill(null).map((_, i) => (
+                              <div key={`${ingredient.name}-${i}`} className={ingredient.name}></div>
+                          ))
+                      ))}
                   <div className="BreadBottom"></div>
               </div>
           </div>

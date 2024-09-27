@@ -19,8 +19,10 @@
 
 .ingredients {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .BreadBottom {
